@@ -40,7 +40,7 @@ The installation steps below are for development purposes only.
 
     bin/instance fg
 
-5. Browse to http://localhost:8080 and click on "Create a new Plone site".
+5. Browse to http://127.0.0.1:8080 and click on "Create a new Plone site".
 
 6. Enter "admin/admin" as username and password when prompted.
 
@@ -50,7 +50,9 @@ The installation steps below are for development purposes only.
    
 8. You should now see a page title "Welcome to Plone" with 
    "Congratulations! You have successfully installed Plone." as
-   description.
+   description. To see the themed version of the site you can browse to
+   http://localhost:8080/Plone. NOTE: the theme is still incomplete and
+   under development.
 
 How to add cnxmlplus files through the web
 ==========================================
