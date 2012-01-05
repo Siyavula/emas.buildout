@@ -76,7 +76,7 @@ How to add cnxmlplus files through the web
 
 5. You should now see the HTML version of the page.
 
-How to add cnxmlplus files using FTP
+How to add cnxml/cnxmlplus files using FTP
 ====================================
 
 1. Use a FTP client to connect to localhost on port 8021
@@ -84,6 +84,9 @@ How to add cnxmlplus files using FTP
 2. Upload a file with "cnxmlplus" as extension eg index.cnxmlplus to
 create an xml file inside Plone with "application/cnxmlplus+xml" as XML
 Format.
+
+3. Upload a file with "cnxml" as extension eg index.cnxml to create an
+xml file inside Plone with "application/cnxml+xml" as XML Format.
 
 Where are the transforms located and how do they work
 =====================================================
