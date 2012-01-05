@@ -14,10 +14,17 @@ following packages:
     libfreetype6-dev libjpeg62-dev libxml2-dev libbz2-dev
     libreadline-dev python-virtualenv
 
+And also:
+
+    libxslt1-dev libxml2-dev
+
 Installation
 ============
 
 The installation steps below are for development purposes only.
+
+0. Create and change to a local user for running the Plone site (don't
+   run as root).
 
 1. First clone the buildout from github:
 
