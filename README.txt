@@ -28,7 +28,7 @@ The installation steps below are for development purposes only.
 
 1. First clone the buildout from github:
 
-    git clone git@github.com:rochecompaan/emas.buildout.git emas.buildout
+    git clone git@github.com:Siyavula/emas.buildout.git emas.buildout
 
 2. Change into emas.buildout and create a virtualenv:
 
