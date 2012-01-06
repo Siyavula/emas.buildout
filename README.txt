@@ -92,8 +92,9 @@ Where are the transforms located and how do they work
 =====================================================
 
 CNXMLPlus files are transformed using a chain of transforms. First
-cnxmlplus is converted to cnxml, then cnxml is converted to
-shortcodehtml and finally shortcodehtml is converted to html.
+cnxmlplus is converted to cnxml with embedded shortcodes, then cnxml
+is converted to shortcodehtml and finally shortcodehtml is converted
+to html.
 
 Inside your buildout there is a "src" directory which contains the
 emas.theme package. The transforms are located in the transforms
@@ -113,4 +114,4 @@ wil run all tests in the emas.theme package.
 If you want to run a specific test you can specify the name of test
 using the "-t" switch:
 
-    bin/test -s emas.theme -t TestTranfsorms
+    bin/test -s emas.theme -t TestTranforms
