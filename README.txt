@@ -37,7 +37,7 @@ The installation steps below are for development purposes only.
 
 3. Bootstrap and run buildout:
 
-    bin/python boostrap -c dev.cfg
+    bin/python bootstrap.py -c dev.cfg
     bin/buildout -c dev.cfg
 
     WARNING: This will take a long time since it downloads Plone, Zope
