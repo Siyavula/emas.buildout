@@ -11,12 +11,18 @@ Assuming you are on a deb based distribution, you need to install the
 following packages:
 
     build-essential python2.6 python2.6-dev libpng12-dev zlib1g-dev
-    libfreetype6-dev libjpeg62-dev libxml2-dev libbz2-dev
-    libreadline-dev python-virtualenv
+    libfreetype6-dev libjpeg62-dev libxml2-dev libxslt1-dev libbz2-dev
+    libreadline-dev python-virtualenv 
 
-And also:
+Tralics needs to be installed manually and put anywhere on your path:
 
-    libxslt1-dev libxml2-dev
+    Download the tarbal from:
+
+        ftp://ftp-sop.inria.fr/apics/tralics-src/tralics-src-2.14.4.tar.gz
+    
+    Extract the tarbal, run make and then copy the tralics binary to
+    /usr/local/bin
+
 
 Installation
 ============
