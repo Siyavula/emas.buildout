@@ -12,7 +12,8 @@ following packages:
 
     build-essential python2.6 python2.6-dev libpng12-dev zlib1g-dev
     libfreetype6-dev libjpeg62-dev libxml2-dev libxslt1-dev libbz2-dev
-    libreadline-dev python-virtualenv 
+    libreadline-dev python-virtualenv libxrender1 libfontconfig1 dvipng
+    texlive-latex-base
 
 Tralics needs to be installed manually and put anywhere on your path:
 
@@ -22,6 +23,13 @@ Tralics needs to be installed manually and put anywhere on your path:
     
     Extract the tarbal, run make and then copy the tralics binary to
     /usr/local/bin
+
+Install wkhtmltoimage by downloading the binary from:
+
+    http://code.google.com/p/wkhtmltopdf/downloads/list
+
+    Extract the tarball, rename the binary to wkhtmltoimage and move it
+    to /usr/local/bin.
 
 
 Installation
