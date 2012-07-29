@@ -12,7 +12,7 @@ following packages:
 
     build-essential python2.6 python2.6-dev libpng12-dev zlib1g-dev
     libfreetype6-dev libjpeg62-dev libxml2-dev libxslt1-dev libbz2-dev
-    libreadline-dev python-virtualenv 
+    libreadline-dev python-virtualenv ttf-freefont
 
 Tralics needs to be installed manually and put anywhere on your path:
 
