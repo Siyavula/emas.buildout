@@ -129,3 +129,10 @@ If you want to run a specific test you can specify the name of test
 using the "-t" switch:
 
     bin/test -s emas.theme -t TestTranforms
+
+Using git pre-commit hook script
+================================
+
+    cd .git/hooks
+    ln -s ../../pre-commit.py pre-commit
+    chmod +x pre-commit
