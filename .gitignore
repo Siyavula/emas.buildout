@@ -9,3 +9,11 @@ src
 var
 eggs
 tags
+TAGS
+backups
+buildout-cache
+gomobile_image_cache
+local
+downloads
+temp
+todo.txt
