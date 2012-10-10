@@ -28,6 +28,7 @@ set -e
 case "$1" in
   start)
 	start-stop-daemon --start --umask 007 --pidfile $PIDFILE \
+        --chdir "$DIR" \
         --chuid $SRVUSER --exec $DAEMON -- $DAEMON_ARGS
 	;;
   stop)
