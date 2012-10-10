@@ -1,6 +1,6 @@
 #! /bin/sh
 ### BEGIN INIT INFO
-# Provides:		redis-server
+# Provides:		redis-emas-server
 # Required-Start:	$syslog $remote_fs
 # Required-Stop:	$syslog $remote_fs
 # Should-Start:		$local_fs
@@ -8,7 +8,7 @@
 # Default-Start:	2 3 4 5
 # Default-Stop:		0 1 6
 # Short-Description:    emas redis-server - Persistent key-value db
-# Description:		emas-redis-server - Persistent key-value db for EMAS sites
+# Description:		emas redis-server - Persistent key-value db for EMAS sites
 ### END INIT INFO
 
 SRVUSER="zope"
