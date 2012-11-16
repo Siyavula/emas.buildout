@@ -13,7 +13,7 @@ following packages:
     build-essential python2.6 python2.6-dev libpng12-dev zlib1g-dev
     libfreetype6-dev libjpeg62-dev libxml2-dev libxslt1-dev libbz2-dev
     libreadline-dev python-virtualenv libxrender1 libfontconfig1 dvipng
-    texlive-latex-base ttf-freefont
+    texlive-latex-base ttf-freefont imagemagick
 
 Tralics needs to be installed manually and put anywhere on your path:
 
