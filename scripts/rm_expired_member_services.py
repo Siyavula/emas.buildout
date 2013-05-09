@@ -31,7 +31,11 @@ newSecurityManager(None, user.__of__(app.acl_users))
 
 today = datetime.datetime.today()
 
+count = 0
+
 for ms_id in portal.memberservices.objectIds():
+
+    count += 1
 
     ms = portal.memberservices._getOb(ms_id)
 
