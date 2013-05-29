@@ -34,7 +34,7 @@ today = datetime.date.today()
 
 count = 0
 expired = 0
-committed = False
+committed = True
 
 memberlog = open(
     os.path.join(os.environ['CLIENT_HOME'], 'deletemembers.dat'), 'a'
