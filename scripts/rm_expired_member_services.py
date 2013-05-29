@@ -34,6 +34,7 @@ today = datetime.date.today()
 
 count = 0
 expired = 0
+committed = False
 
 memberlog = open(
     os.path.join(os.environ['CLIENT_HOME'], 'deletemembers.dat'), 'a'
@@ -47,6 +48,7 @@ def commit():
     print 'Committing transaction. Count = ', count
     try:
         transaction.commit()
+        committed = True
     except ConflictError: 
         print "Could not commit transaction, restarting transaction."
         # start a new transaction
@@ -60,7 +62,8 @@ for ms_id in portal.memberservices.objectIds():
     now = datetime.datetime.now()
 
     while not (runtime_start <= now.hour < runtime_end):
-        commit()
+        if not committed:
+            commit()
         print "sleeping"
         sleep(60)
         now = datetime.datetime.now()
@@ -77,6 +80,7 @@ for ms_id in portal.memberservices.objectIds():
             )
         portal.memberservices.manage_delObjects(ids=ms_id)
         expired += 1
+        committed = False
 
     if count % 100 == 0:
         commit()
