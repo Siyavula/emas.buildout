@@ -1,5 +1,5 @@
 CREATE TABLE MEMBERSERVICES (
-    MEMBERSERVICE_ID integer primary key not null,
+    MEMBERSERVICE_ID serial primary key,
     USERID varchar(100) not null,
     RELATED_SERVICE integer not null,
     EXPIRY_DATE date not null,
