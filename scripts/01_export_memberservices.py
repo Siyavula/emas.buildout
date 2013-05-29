@@ -28,14 +28,14 @@ class IntMarshaller(object):
         return str(raw_int)
 
 
-MARSHALLERS = {'userid': None,
-               'related_service': RelationMarshaller(),
-               'expiry_date': DateMarshaller(),
-               'credits': IntMarshaller(),
-               'service_type': None,
+MARSHALLERS = {'userid'          : None,
+               'related_service' : RelationMarshaller(),
+               'expiry_date'     : DateMarshaller(),
+               'credits'         : IntMarshaller(),
+               'service_type'    : None,
               }
 NAMES = \
-    ['userid', 'related_service', 'expiry_date', 'credits', 'service_type']
+    ['userid', 'related_service', 'expiry_date', 'credits', 'service_type',]
 
 
 def exportObject(item, portal):
@@ -61,11 +61,12 @@ portal.setupCurrentSkin(portal.REQUEST)
 path = os.path.join('scripts', 'memberservices.csv')
 export_file = open(path, 'wb')
 # column headings
-export_file.write(','.join(NAMES) + '\r\n')
+export_file.write('memberservice_id,' + ','.join(NAMES) + '\r\n')
 
 items = portal.memberservices.objectValues()
 for counter, item in enumerate(items):
-    print 'Processing item %s of %s' % (counter+1, len(items))
+    number = str(counter+1)
+    print 'Processing item %s of %s' % (number, len(items))
     print '----------------------------------------------'
     
     data, errors = exportObject(item, portal)
@@ -73,7 +74,7 @@ for counter, item in enumerate(items):
     if errors:
         print errors
     else:
-        export_file.write(data + '\r\n')
+        export_file.write(number + ',' + data + '\r\n')
 
 export_file.close()
 
