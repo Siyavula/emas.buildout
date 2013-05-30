@@ -46,8 +46,11 @@ runtime_end = 4
 def commit():
     print '************************************************************'
     print 'Committing transaction. Count = ', count
+    global committed
     try:
         transaction.commit()
+        memberlog.flush()
+        os.fsync(memberlog.fileno())
         committed = True
     except ConflictError: 
         print "Could not commit transaction, restarting transaction."
@@ -64,7 +67,6 @@ for ms_id in portal.memberservices.objectIds():
     while not (runtime_start <= now.hour < runtime_end):
         if not committed:
             commit()
-        print "sleeping"
         sleep(60)
         now = datetime.datetime.now()
 
