@@ -1,7 +1,8 @@
+import os
 import sys
 import datetime
 import transaction
-from types import ListType
+from time import sleep
 
 from Testing import makerequest
 from AccessControl.SecurityManagement import newSecurityManager
@@ -29,28 +30,64 @@ app = makerequest.makerequest(app)
 user = app.acl_users.getUser('admin')
 newSecurityManager(None, user.__of__(app.acl_users))
 
-today = datetime.datetime.today()
+today = datetime.date.today()
 
 count = 0
+expired = 0
+committed = True
+
+memberlog = open(
+    os.path.join(os.environ['CLIENT_HOME'], 'deletemembers.dat'), 'a'
+    )
+
+runtime_start = 0
+runtime_end = 4
+
+def commit():
+    print '************************************************************'
+    print 'Committing transaction. Count = ', count
+    global committed
+    try:
+        transaction.commit()
+        memberlog.flush()
+        os.fsync(memberlog.fileno())
+        committed = True
+    except ConflictError: 
+        print "Could not commit transaction, restarting transaction."
+        # start a new transaction
+        transaction.begin() 
 
 for ms_id in portal.memberservices.objectIds():
 
     count += 1
 
     ms = portal.memberservices._getOb(ms_id)
+    now = datetime.datetime.now()
+
+    while not (runtime_start <= now.hour < runtime_end):
+        if not committed:
+            commit()
+        sleep(60)
+        now = datetime.datetime.now()
 
     if ms.expiry_date < today:
         print "%s expiring on %s" % (ms.absolute_url(), ms.expiry_date)
         print "Deleting ", ms.absolute_url()
+        memberlog.write(
+            "%s,%s,%s,%s,%s\n" % (ms.userid, 
+                                  ms.related_service.to_id,
+                                  ms.expiry_date,
+                                  ms.credits,
+                                  ms.service_type)
+            )
         portal.memberservices.manage_delObjects(ids=ms_id)
+        expired += 1
+        committed = False
 
-    if count % 1000 == 0:
-        print '************************************************************'
-        print 'Committing transaction.'
-        try:
-            transaction.commit()
-        except ConflictError: 
-            # start a new transaction
-            transaction.begin() 
+    if count % 100 == 0:
+        commit()
 
+print "Expired: ", expired
+print "Total active member services: ", len(portal.memberservices.objectIds())
+memberlog.close()
 transaction.commit()
