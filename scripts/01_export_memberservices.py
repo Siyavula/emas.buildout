@@ -35,13 +35,20 @@ class IntMarshaller(object):
 
 
 MARSHALLERS = {'userid'          : None,
+               'title'           : None,
                'related_service' : RelationMarshaller(),
                'expiry_date'     : DateMarshaller(),
                'credits'         : IntMarshaller(),
                'service_type'    : None,
               }
 NAMES = \
-    ['userid', 'related_service', 'expiry_date', 'credits', 'service_type',]
+    ['userid',
+     'title',
+     'related_service',
+     'expiry_date',
+     'credits',
+     'service_type',
+     ]
 
 
 def getIgnoreList():
