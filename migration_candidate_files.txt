@@ -1,65 +1,187 @@
-emas.app/emas/app/member_service_folder.py
-emas.app/emas/app/configure.zcml
-emas.app/emas/app/setuphandlers.py
-emas.app/emas/app/service_templates/view.pt
-emas.app/emas/app/service_templates/sampleview.pt
-emas.app/emas/app/browser/vcsresponseprocessors.py
-emas.app/emas/app/browser/warning.py
-emas.app/emas/app/browser/templates/activememberservicesfor.pt
-emas.app/emas/app/browser/templates/warning.pt
-emas.app/emas/app/browser/templates/paymentapproved.pt
-emas.app/emas/app/browser/templates/memberservices.pt
-emas.app/emas/app/browser/memberservices.py
-emas.app/emas/app/browser/utils.py
-emas.app/emas/app/browser/purchase.py
-emas.app/emas/app/browser/usergroups.py
-emas.app/emas/app/browser/extendservices.py
-emas.app/emas/app/browser/tests/test_extendmemberservices.py
-emas.app/emas/app/browser/confirm.py
-emas.app/emas/app/eventhandlers.py
-emas.app/emas/app/profiles/default/types.xml
-emas.app/emas/app/profiles/default/workflows/memberservice_workflow/definition.xml
-emas.app/emas/app/profiles/default/workflows/memberservicefolder_workflow/definition.xml
-emas.app/emas/app/profiles/default/types/Folder.xml
-emas.app/emas/app/profiles/default/types/emas.app.memberservicefolder.xml
-emas.app/emas/app/profiles/default/types/emas.app.memberservice.xml
-emas.app/emas/app/profiles/default/types/emas.app.memberservicesfolder.xml
-emas.app/emas/app/profiles/default/workflows.xml
-emas.app/emas/app/member_service_templates/sampleview.pt
-emas.app/emas/app/member_service_folder_templates/table.pt
-emas.app/emas/app/member_service_folder_templates/manage_memberservices.pt
-emas.app/emas/app/member_service_folder_templates/sampleview.pt
-emas.app/emas/app/scripts/add_orders_and_memberservices_folders.zctl
-emas.app/emas/app/scripts/export_mxitmember_services.zctl
-emas.app/emas/app/scripts/fix_memberservices_ownership.py
-emas.app/emas/app/scripts/migrate_services.zctl
-emas.app/emas/app/scripts/init_member_services.py
-emas.app/emas/app/scripts/remove_order_annotations.py
-emas.app/emas/app/scripts/update_mxitmemberservices.zctl
-emas.app/emas/app/tests/test_member_services.py
-emas.app/emas/app/member_service.py
-emas.mobiletheme/emas/mobiletheme/templates/practice.pt
-emas.mobiletheme/emas/mobiletheme/templates/document.pt
-emas.mobiletheme/emas/mobiletheme/templates/list_services.pt
-emas.mobiletheme/emas/mobiletheme/templates/toc.pt
-emas.mobiletheme/emas/mobiletheme/list_services.py
-emas.theme/emas/theme/browser/templates/practice.pt
-emas.theme/emas/theme/browser/mxitpayment.py
-emas.theme/emas/theme/browser/viewlets.py
-emas.theme/emas/theme/browser/views.py
-emas.theme/emas/theme/browser/practice.py
-emas.theme/emas/theme/browser/tests/test_mxitpayment.py
-emas.theme/emas/theme/browser/tests/test_practice_service_messages_viewlet.py
-emas.theme/emas/theme/browser/tests/test_practice.py
-emas.theme/emas/theme/profiles/default/actions.xml
-emas.theme/emas/theme/profiles/default/viewlets.xml
-emas.theme/emas/theme/transaction.py
-emas.theme/emas/theme/tests/test_payservice_viewlets.py
-emas.theme/emas/theme/tests/data/moreexercise_nocredit.html
-emas.theme/emas/theme/tests/data/moreexercise_not_registered.html
-emas.theme/emas/theme/tests/data/askquestion_not_registered.html
-emas.theme/emas/theme/tests/data/accessanswers_not_registered.html
-emas.theme/emas/theme/tests/data/accessanswers_nocredit.html
-emas.theme/emas/theme/tests/data/askquestion_nocredit.html
-emas.theme/emas/theme/tests/test_eventhandlers.py
-emas.theme/emas/theme/tests/test_enabledservices.py
+src/emas.app/emas/app/member_service_folder.py
+    - get data from emas.app.browser.utils
+    - use filtering in emas.app.browser.utils
+
+src/emas.app/emas/app/configure.zcml
+    remove adapter for .member_service_folder.IMemberServiceFolder
+
+src/emas.app/emas/app/setuphandlers.py
+    remove memberservice folder create
+
+src/emas.app/emas/app/service_templates/sampleview.pt
+    remove file
+
+src/emas.app/emas/app/browser/vcsresponseprocessors.py
+    just test and make sure utils does the right thing.
+
+src/emas.app/emas/app/browser/warning.py
+    test and make sure utils does the right thing, especially the link to the service.
+
+src/emas.app/emas/app/browser/templates/activememberservicesfor.pt
+    test
+
+src/emas.app/emas/app/browser/templates/warning.pt
+    test service_url; utils has to compute this in a new way.    
+
+src/emas.app/emas/app/browser/templates/paymentapproved.pt
+    test service_url; utils has to compute this in a new way.    
+
+src/emas.app/emas/app/browser/templates/memberservices.pt
+    done 
+
+src/emas.app/emas/app/browser/memberservices.py
+    refactor ActiveMemberServicesFor to use the utils methods
+
+src/emas.app/emas/app/browser/utils.py
+    add servive_uuids filtering to member_services method
+
+src/emas.app/emas/app/browser/usergroups.py
+    use emas.app.browser.utils to delete memberservices
+
+src/emas.app/emas/app/browser/extendservices.py
+    use emas.app.browser.utils to update memberservices
+
+src/emas.app/emas/app/browser/tests/test_extendmemberservices.py
+    run test and fix issues
+    
+src/emas.app/emas/app/browser/confirm.py
+    fix emas.app.browser.utils.get_paid_orders_for_member to get data from db
+
+src/emas.app/emas/app/eventhandlers.py
+    use emas.app.browser.utils
+
+src/emas.app/emas/app/profiles/default/types.xml
+    remove references to memberservices and folder
+
+src/emas.app/emas/app/profiles/default/workflows/memberservice_workflow/definition.xml
+    NOT CERTAIN... gotta discuss what we going to do here
+
+src/emas.app/emas/app/profiles/default/workflows/memberservicefolder_workflow/definition.xml
+    remove
+
+src/emas.app/emas/app/profiles/default/types/Folder.xml
+    remove references
+
+src/emas.app/emas/app/profiles/default/types/emas.app.memberservicefolder.xml
+    remove
+
+src/emas.app/emas/app/profiles/default/types/emas.app.memberservice.xml
+    remove
+
+src/emas.app/emas/app/profiles/default/types/emas.app.memberservicesfolder.xml
+    remove
+
+src/emas.app/emas/app/profiles/default/workflows.xml
+    remove references?
+
+src/emas.app/emas/app/member_service_templates/sampleview.pt    
+    remove
+
+src/emas.app/emas/app/member_service_folder_templates/table.pt
+    just test against changes in view
+
+src/emas.app/emas/app/member_service_folder_templates/manage_memberservices.pt
+    just test against changes in view
+    
+src/emas.app/emas/app/member_service_folder_templates/sampleview.pt
+    remove
+
+src/emas.app/emas/app/scripts/add_orders_and_memberservices_folders.zctl
+    remove
+
+src/emas.app/emas/app/scripts/export_mxitmember_services.zctl
+    refactor emas.app.browser.utils.member_services_for to use db
+
+src/emas.app/emas/app/scripts/fix_memberservices_ownership.py
+    use emas.app.browser.utils
+
+src/emas.app/emas/app/scripts/migrate_services.zctl
+    remove
+
+src/emas.app/emas/app/scripts/init_member_services.py
+    remove?
+
+src/emas.app/emas/app/scripts/remove_order_annotations.py
+    remove
+
+src/emas.app/emas/app/scripts/update_mxitmemberservices.zctl
+    use emas.app.browser.utils
+
+src/emas.app/emas/app/tests/test_member_services.py
+    use emas.app.browser.utils
+
+src/emas.app/emas/app/member_service.py
+    remove eventually after all other steps in migration are done.
+    
+src/emas.mobiletheme/emas/mobiletheme/templates/practice.pt
+    test against changes in view and utils
+
+src/emas.mobiletheme/emas/mobiletheme/templates/document.pt
+    test against changes in view and utils
+
+src/emas.mobiletheme/emas/mobiletheme/templates/toc.pt
+    test against changes in view and utils
+
+src/emas.mobiletheme/emas/mobiletheme/list_services.py
+    refactor emas.app.browser.utils.member_services_for_subject
+
+src/emas.theme/emas/theme/browser/templates/practice.pt
+    merge trunk and test agains utils and view changes
+
+src/emas.theme/emas/theme/browser/mxitpayment.py
+    test against changes in emas.app.browser.utils.member_services 
+    refactor get_memberservice to use utils
+
+src/emas.theme/emas/theme/browser/viewlets.py
+    test against changes in utils and view class for practice messages
+    
+src/emas.theme/emas/theme/browser/views.py
+    refactor to use changes in emas.app.browser.utils.member_services 
+    refactor get_member_services_for_subject to use utils
+
+src/emas.theme/emas/theme/browser/practice.py
+    test against changes in emas.app.browser.utils.member_services 
+    refactor to use changes in emas.app.browser.utils.member_services 
+
+src/emas.theme/emas/theme/browser/tests/test_mxitpayment.py
+    run tests
+
+src/emas.theme/emas/theme/browser/tests/test_practice_service_messages_viewlet.py
+    run tests
+
+src/emas.theme/emas/theme/browser/tests/test_practice.py
+    run tests
+
+src/emas.theme/emas/theme/profiles/default/actions.xml
+    test agains new views and changes in utils
+
+src/emas.theme/emas/theme/profiles/default/viewlets.xml
+    test agains new views and changes in utils
+
+src/emas.theme/emas/theme/tests/test_payservice_viewlets.py
+    run tests
+
+src/emas.theme/emas/theme/tests/data/moreexercise_nocredit.html
+    run tests
+
+src/emas.theme/emas/theme/tests/data/moreexercise_not_registered.html
+    run tests
+
+src/emas.theme/emas/theme/tests/data/askquestion_not_registered.html
+    run tests
+
+src/emas.theme/emas/theme/tests/data/accessanswers_not_registered.html
+    run tests
+
+src/emas.theme/emas/theme/tests/data/accessanswers_nocredit.html
+    run tests
+
+src/emas.theme/emas/theme/tests/data/askquestion_nocredit.html
+    run tests
+
+src/emas.theme/emas/theme/tests/test_eventhandlers.py
+    run tests
+
+src/emas.theme/emas/theme/tests/test_enabledservices.py
+    run tests
+
