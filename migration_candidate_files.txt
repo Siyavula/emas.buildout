@@ -1,3 +1,7 @@
+IMemberService
+    - tag new memberservice objects with this interface.
+    - remember to fire appropriated events or our eventhandlers won't work!
+
 src/emas.app/emas/app/member_service_folder.py
     - get data from emas.app.browser.utils
     - use filtering in emas.app.browser.utils

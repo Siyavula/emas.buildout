@@ -26,19 +26,47 @@ Create new cluster and database
     Access the DB as emas user
     >>psql -p 5435 -U emas
 
+Set max_prepared_transactions
+-----------------------------
+
+    We are using two-phased commits, so we cannot operate with 0 
+    max_prepared_transactions. It causes and OperationalError.
+    
+    Set max_prepared_transactions to something greater than 0 and preferably to
+    the same value as max_connections.
+
+    This is done in:
+    /etc/postgresql/9.1/emas/postgresql.conf
+    
+    Restart postgres:
+    /etc/init.d/postgresql restart
+
+    If the restart fails you might have to check the kernel's SHMMAX parameter.
+
+Export current memberservices
+-----------------------------
+
+    In [instance]/scripts run:
+    ./bin/instance run ./scripts/01_export_memberservices.py emas
 
 Create MEMBERSERVICE table
 --------------------------
 
-Extract memberservices as CSV
------------------------------
-
-    In the top level dir of the relevant zope instance run:
-    ./bin/instance run ./scripts/export_memberservices.py emas
-
+    In [instance]/scripts run:
+    ./02_create_memberservices_table.sh
 
 Import memberservices to postgres DB
 ------------------------------------
+    
+    In [instance]/scripts run:
+    ./03_import_memberservices.sh
+
+    NB: check the memberservices_memberservice_id_seq sequence. Make sure it
+    is set to a value greater than:
+    select max(memberservice_id) from memberservices;
+    
+    To set the sequence value use:
+    alter sequence memberservices_memberservice_id_seq restart with NNN;
 
 Delete old memberservices
 -------------------------
