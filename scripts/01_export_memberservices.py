@@ -16,13 +16,40 @@ PREV_EXPORT_PATH = os.path.join('scripts', 'prev_export_memberservices.csv')
 
 class RelationMarshaller(object):
     
-    def marshall(self, relation):
+    def marshall(self, relation, portal):
         return str(relation.to_id)
+
+
+class SubjectMarshaller(object):
+    
+    def marshall(self, relation, portal):
+        intids = queryUtility(IIntIds, context=portal)
+        intid = relation.to_id
+        if not intid:
+            return ''
+        return intids.queryObject(intid).subject
+
+
+class GradeMarshaller(object):
+    
+    def marshall(self, relation, portal):
+        intids = queryUtility(IIntIds, context=portal)
+        intid = relation.to_id
+        if not intid:
+            return ''
+        return intids.queryObject(intid).grade.split('-')[-1]
+
+
+class IntIdMarshaller(object):
+    
+    def marshall(self, item, portal):
+        intids = queryUtility(IIntIds, context=portal)
+        return str(intids.getId(item))
 
 
 class DateMarshaller(object):
 
-    def marshall(self, date):
+    def marshall(self, date, portal):
         if isinstance(date, StringType):
             return date
         return date.strftime('%d/%m/%Y')
@@ -30,26 +57,31 @@ class DateMarshaller(object):
 
 class IntMarshaller(object):
     
-    def marshall(self, raw_int):
+    def marshall(self, raw_int, portal):
         return str(raw_int)
 
 
-MARSHALLERS = {'userid'          : None,
-               'title'           : None,
-               'related_service' : RelationMarshaller(),
-               'expiry_date'     : DateMarshaller(),
-               'credits'         : IntMarshaller(),
-               'service_type'    : None,
-              }
-NAMES = \
-    ['userid',
-     'title',
-     'related_service',
-     'expiry_date',
-     'credits',
-     'service_type',
-     ]
+ATTR_SEQUENCE = ['User id',
+                 'Title',
+                 'Related service',
+                 'Grade',
+                 'Subject',
+                 'Expiry date',
+                 'Credits',
+                 'Service type',
+                 'Zope id',
+                ]
 
+ATTR_DETAILS = {'User id'           : ['userid', None],
+                'Title'             : ['title', None],
+                'Related service'   : ['related_service', RelationMarshaller()],
+                'Subject'           : ['related_service', SubjectMarshaller()],
+                'Grade'             : ['related_service', GradeMarshaller()],
+                'Expiry date'       : ['expiry_date', DateMarshaller()],
+                'Credits'           : ['credits', IntMarshaller()],
+                'Service type'      : ['service_type', None],
+                'Zope id'           : ['self', IntIdMarshaller()],
+               }
 
 def getIgnoreList():
     ids = []
@@ -68,11 +100,16 @@ def getIgnoreList():
 def exportObject(item, portal):
     print 'Exporting object:%s' % item.getId()
     data = []
-    for name in NAMES:
-        value = getattr(item, name, '')
-        marshaller = MARSHALLERS.get(name)
+    for attr_key in ATTR_SEQUENCE:
+        attr_name = ATTR_DETAILS[attr_key][0]
+        marshaller = ATTR_DETAILS[attr_key][1]
+        
+        if attr_name == 'self':
+            value = item
+        else:
+            value = getattr(item, attr_name, '')
         if marshaller:
-            value = marshaller.marshall(value)
+            value = marshaller.marshall(value, portal)
         data.append(value)
     print data
     return ','.join(data), None
@@ -87,7 +124,7 @@ portal.setupCurrentSkin(portal.REQUEST)
 
 export_file = open(EXPORT_PATH, 'wb')
 # column headings
-export_file.write('memberservice_id,' + ','.join(NAMES) + '\r\n')
+export_file.write('memberservice_id,' + ','.join(ATTR_SEQUENCE) + '\r\n')
 
 # make a copy so we can compare against it on the next run
 prev_file = open(PREV_EXPORT_PATH, 'a+b')
@@ -110,7 +147,7 @@ for counter, item in enumerate(items):
     if errors:
         print errors
     else:
-        data = '%s,%s,%s\r\n' % (number, data, intid)
+        data = '%s,%s\r\n' % (number, data)
         export_file.write(data)
         prev_file.write(data)
 
