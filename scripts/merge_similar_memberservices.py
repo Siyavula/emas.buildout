@@ -52,7 +52,25 @@ def merge_memberservices(portal, memberservices, current_idx=0):
 
 
 def process(portal, pmt, merged, not_merged):
-    mids = pmt.listMemberIds()
+    suids = []
+    for subject in ('maths', 'science'):
+        for grade in (10, 11, 12):
+            sid = '%s-%s-monthly-practice' % (subject, grade)
+            service = app.emas[sid]
+            suids.append(IUUID(service))
+
+    today = datetime.datetime.now().date()
+    mids = []
+    for brain in app.emas.portal_catalog.unrestrictedSearchResults(
+            serviceuid=suids,
+            portal_type='emas.app.memberservice',
+            expiry_date={'query':  today, 'range':'min'}
+            ):
+        service = brain.getObject()
+        if service.userid not in mids:
+            mids.append(service.userid)
+
+
     total = len(mids)
     print '--------------------------------START-------------------------------'
     print 'Processing a total of %s members.' % total
