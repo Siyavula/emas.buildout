@@ -55,7 +55,7 @@ def process(portal, pmt, merged, not_merged):
     suids = []
     for subject in ('maths', 'science'):
         for grade in (10, 11, 12):
-            sid = '%s-%s-monthly-practice' % (subject, grade)
+            sid = '%s-grade%s-monthly-practice' % (subject, grade)
             service = app.emas[sid]
             suids.append(IUUID(service))
 
