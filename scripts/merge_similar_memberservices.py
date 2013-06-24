@@ -30,6 +30,10 @@ def process(portal, pmt):
                 continue
             print 'Unifying member services.'
             memberservices[0].merge_memberservices(memberservices)
+
+            # Better commit the work too
+            transaction.commit()
+
     print '--------------------------------DONE-------------------------------'
 
 
@@ -57,6 +61,3 @@ pmt = getToolByName(portal, 'portal_membership')
 
 # Now do the work
 process(portal, pmt)
-
-# Better commit the work too
-#transaction.commit()
