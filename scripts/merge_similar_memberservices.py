@@ -20,13 +20,16 @@ def process(portal, pmt):
     uids = utils.practice_service_uuids(portal)
     for count, mid in enumerate(mids):
         for subject in ['maths', 'science']:
-            memberservices = utils.member_services_for_subject(portal, uids, mid)
+            memberservices = utils.member_services_for_subject(portal,
+                                                               uids,
+                                                               mid,
+                                                               subject)
             print 'Processing member:%s - number %s of %s.' % (mid, count+1, total)
             if not memberservices:
-                #print 'Skipping... no active member services.'
+                print 'Skipping... no active member services.'
                 continue
             print 'Unifying member services.'
-            ms[0].merge_memberservices(memberservices)
+            memberservices[0].merge_memberservices(memberservices)
     print '--------------------------------DONE-------------------------------'
 
 
