@@ -23,7 +23,7 @@ def is_similar_to(self, other):
 
 
 def merge_with(self, other):
-    now = datetime.now().date()
+    now = datetime.datetime.now().date()
     delta = other.expiry_date - now
     if delta.days > 0:
         self.expiry_date = self.expiry_date + delta
