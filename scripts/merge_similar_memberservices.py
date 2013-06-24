@@ -13,7 +13,6 @@ from emas.app.browser import utils
 
 
 def process(portal, pmt):
-    import pdb;pdb.set_trace()
     mids = pmt.listMemberIds()
     total = len(mids)
     print '--------------------------------START-------------------------------'
