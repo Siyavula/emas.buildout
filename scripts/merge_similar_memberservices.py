@@ -6,6 +6,7 @@ import transaction
 from Testing import makerequest
 from AccessControl.SecurityManagement import newSecurityManager
 
+from plone.uuid.interfaces import IUUID
 from zope.app.component.hooks import setSite
 from Products.CMFCore.utils import getToolByName
 
