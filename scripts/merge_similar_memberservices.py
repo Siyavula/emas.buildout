@@ -52,7 +52,7 @@ def merge_memberservices(portal, memberservices, current_idx=0):
     return merge_memberservices(portal, memberservices, current_idx+1) 
 
 
-def process(portal, pmt, merged, not_merged):
+def process(portal, pmt, merged):
     suids = []
     for subject in ('maths', 'science'):
         for grade in (10, 11, 12):
@@ -83,15 +83,10 @@ def process(portal, pmt, merged, not_merged):
                                                                mid,
                                                                subject)
             titles = [ms.Title() for ms in memberservices]
-            print 'Processing member:%s - number %s of %s.' % (mid, count+1, total)
-            if not memberservices:
-                print 'Skipping... no active member services.'
-                tmpservices = not_merged.get(mid, [])
-                tmpservices.extend(titles)
-                not_merged[mid] = tmpservices
+            if len(memberservices) <= 1:
                 continue
 
-            print 'Merging member services for member:%s.' % mid
+            print 'Merging member services for member: %s' % mid
             merge_memberservices(portal, memberservices)
             tmpservices = merged.get(mid, [])
             tmpservices.extend(titles)
@@ -102,7 +97,7 @@ def process(portal, pmt, merged, not_merged):
             print 'Commit 100 merges now.'
             transaction.commit()
     
-    return merged, not_merged
+    return merged
     print '--------------------------------DONE-------------------------------'
 
 
@@ -130,15 +125,10 @@ pmt = getToolByName(portal, 'portal_membership')
 
 # Now do the work
 merged = {}
-not_merged = {}
-merged, not_merged = process(portal, pmt, merged, not_merged)
+merged = process(portal, pmt, merged)
 
 print '-------------------------------------------------------------------'
 print "The following %s members services where merged:" % len(merged)
 for mid, titles in merged.items():
     print '%s\r' % mid
 
-print '-------------------------------------------------------------------'
-print "The following %s members services where not merged:" % len(not_merged)
-for mid, titles in not_merged.items():
-    print '%s\r' % mid
