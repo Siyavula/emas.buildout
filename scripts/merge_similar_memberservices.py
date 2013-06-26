@@ -52,7 +52,7 @@ def merge_memberservices(portal, memberservices, current_idx=0):
     return merge_memberservices(portal, memberservices, current_idx+1) 
 
 
-def process(portal, pmt, merged):
+def process(portal, pmt):
     suids = []
     for subject in ('maths', 'science'):
         for grade in (10, 11, 12):
@@ -82,22 +82,26 @@ def process(portal, pmt, merged):
                                                                uids,
                                                                mid,
                                                                subject)
-            titles = [ms.Title() for ms in memberservices]
-            if len(memberservices) <= 1:
-                continue
+            # group by grade
+            d = {}
+            for ms in memberservices:
+                grade = ms.related_service.to_object.grade
+                d.setdefault(grade, [])
+                d[grade].append(ms)
 
-            print 'Merging member services for member: %s' % mid
-            merge_memberservices(portal, memberservices)
-            tmpservices = merged.get(mid, [])
-            tmpservices.extend(titles)
-            merged[mid] = tmpservices
+            # now check for possible duplicates
+            for grade, services in d.items():
+                if len(services) <= 1:
+                    continue
+                else:
+                    print 'Merging member services for member: %s' % mid
+                    merge_memberservices(portal, memberservices)
         
         if not count % 100:
             # Better commit the work too
-            print 'Commit 100 merges now.'
+            print 'Committing merges'
             transaction.commit()
     
-    return merged
     print '--------------------------------DONE-------------------------------'
 
 
@@ -124,11 +128,4 @@ newSecurityManager(None, user.__of__(app.acl_users))
 pmt = getToolByName(portal, 'portal_membership')
 
 # Now do the work
-merged = {}
-merged = process(portal, pmt, merged)
-
-print '-------------------------------------------------------------------'
-print "The following %s members services where merged:" % len(merged)
-for mid, titles in merged.items():
-    print '%s\r' % mid
-
+process(portal, pmt)
