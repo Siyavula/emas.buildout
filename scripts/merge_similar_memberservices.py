@@ -95,7 +95,7 @@ def process(portal, pmt):
                     continue
                 else:
                     print 'Merging member services for member: %s' % mid
-                    merge_memberservices(portal, memberservices)
+                    merge_memberservices(portal, services)
         
         if not count % 100:
             # Better commit the work too
