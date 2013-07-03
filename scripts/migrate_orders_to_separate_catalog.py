@@ -16,6 +16,7 @@ from logging import getLogger
 
 TIME_FORMAT = '%H:%M:%S:%s'
 
+
 def process(portal):
     print '-------------------------------------------------------------------'
     print('Started at:%s' % datetime.datetime.now().strftime(TIME_FORMAT))
@@ -23,21 +24,34 @@ def process(portal):
     order_catalog = getToolByName(portal, 'order_catalog')
 
     orders = portal.orders
-    order_ids = orders.objectIds()
-    print("A total of %s orders will be migrated.:" % len(orders))
-    for count, order_id in enumerate(order_ids):
+    query = {'portal_type':'emas.app.order',
+             'path': '/'.join(orders.getPhysicalPath())}
+    brains = portal_catalog(query)
+    print('A total of %s orders will be migrated.' % len(brains))
+    m_start = datetime.datetime.now()
+    print('Migration started at %s' % m_start.strftime(TIME_FORMAT))
+    for count, brain in enumerate(brains):
         start = datetime.datetime.now()
-        print('Start order:%s at %s' % (count, start.strftime(TIME_FORMAT)))
-        order = orders[order_id]
+        print('Start order:%s at %s' % (count+1, start.strftime(TIME_FORMAT)))
+
+        order = brain.getObject() 
         portal_catalog.uncatalog_object('/'.join(order.getPhysicalPath()))
         for item in order.order_items():
+            print('Uncataloging order item:%s' % item.getId())
             portal_catalog.uncatalog_object('/'.join(item.getPhysicalPath()))
-        order_catalog.reindexObject(order)
+        print('Indexing in custom catalog.')
+        order.reindexObject()
         finish = datetime.datetime.now()
         print('Finished order:%s at %s' % (count, finish.strftime(TIME_FORMAT)))
         print('It took %s seconds.' % (finish - start).seconds)
+        if not (count % 1000):
+            print('Commiting 1000 orders.')
+            transaction.commit()
 
-    print('Completed at:%s' % datetime.datetime.now().strftime(TIME_FORMAT))
+    m_end = datetime.datetime.now()
+    print('Completed at:%s' % m_end.strftime(TIME_FORMAT))
+    print('Migration took %s seconds.' % (m_end - m_start).seconds)
+    print('A total of %s orders were migrated.' % len(brains))
     print '-------------------------------------------------------------------'
 
 
@@ -50,9 +64,9 @@ except IndexError:
     portal_id = 'Plone' 
 
 if not app.hasObject(portal_id):
-    print "Please specify the id of your plone site as the first argument "
-    print "to this script."
-    print "Usage: <instancehome>/bin/instance run %s <id>" % sys.argv[0]
+    print 'Please specify the id of your plone site as the first argument '
+    print 'to this script.'
+    print 'Usage: <instancehome>/bin/instance run %s <id>' % sys.argv[0]
     sys.exit(1)
 
 portal = app[portal_id]
@@ -64,4 +78,4 @@ newSecurityManager(None, user.__of__(app.acl_users))
 
 process(portal)
 
-# transaction.commit()
+transaction.commit()
