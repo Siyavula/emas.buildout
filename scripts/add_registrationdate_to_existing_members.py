@@ -11,8 +11,8 @@ from Products.CMFCore.utils import getToolByName
 
 def process(portal, pmt):
     
-    # iterate over all members and add the registration date to sometime in 
-    # the past - a month ago from current date.
+    # iterate over all members and add the registration date, set it to be
+    # (arbitrarily) a month ago from current date.
     for member in pmt.listMembers():
         month_ago = datetime.now() - timedelta(1*365/12) # subtract a month
         member.setMemberProperties(mapping={"registrationdate": month_ago})
