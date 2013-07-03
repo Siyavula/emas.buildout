@@ -9,13 +9,31 @@ from AccessControl.SecurityManagement import newSecurityManager
 from zope.app.component.hooks import setSite
 from Products.CMFCore.utils import getToolByName
 
+def commit(count):
+    print '************************************************************'
+    print 'Committing transaction. Count = ', count
+    try:
+        transaction.commit()
+    except ConflictError: 
+        print "Could not commit transaction, restarting transaction."
+        # start a new transaction
+        transaction.begin() 
+
 def process(portal, pmt):
     
     # iterate over all members and add the registration date, set it to be
     # (arbitrarily) a month ago from current date.
+    count = 0
     for member in pmt.listMembers():
+        #oldest member service creation date
         month_ago = datetime.now() - timedelta(1*365/12) # subtract a month
-        member.setMemberProperties(mapping={"registrationdate": month_ago})
+        registration_date = member.getProperty('registrationdate')
+        if registration_date == None:
+            member.setMemberProperties(mapping={"registrationdate": month_ago})
+            count += 1
+
+        if count % 100 == 0:
+            commit(count)
 
     print '--------------------------------DONE-------------------------------'
 
@@ -43,3 +61,4 @@ pmt = getToolByName(portal, 'portal_membership')
 
 # Now do the work
 process(portal, pmt)
+transaction.commit()
