@@ -1,6 +1,5 @@
 import os
 import sys
-from datetime import datetime, timedelta, date
 import transaction
 
 from Testing import makerequest
@@ -8,34 +7,7 @@ from AccessControl.SecurityManagement import newSecurityManager
 
 from zope.app.component.hooks import setSite
 from Products.CMFCore.utils import getToolByName
-
-def commit(count):
-    print '************************************************************'
-    print 'Committing transaction. Count = ', count
-    try:
-        transaction.commit()
-    except ConflictError: 
-        print "Could not commit transaction, restarting transaction."
-        # start a new transaction
-        transaction.begin() 
-
-def process(portal, pmt):
-    
-    # iterate over all members and add the registration date, set it to be
-    # (arbitrarily) a month ago from current date.
-    count = 0
-    for member in pmt.listMembers():
-        #oldest member service creation date
-        month_ago = datetime.now() - timedelta(1*365/12) # subtract a month
-        registration_date = member.getProperty('registrationdate')
-        if registration_date == None:
-            member.setMemberProperties(mapping={"registrationdate": month_ago})
-            count += 1
-
-        if count % 100 == 0:
-            commit(count)
-
-    print '--------------------------------DONE-------------------------------'
+from DateTime import DateTime
 
 # Setup the environment for the script and make sure we have all required values
 # app is bound for us, when this script starts.
@@ -59,6 +31,41 @@ user = app.acl_users.getUser('admin')
 newSecurityManager(None, user.__of__(app.acl_users))
 pmt = getToolByName(portal, 'portal_membership')
 
-# Now do the work
-process(portal, pmt)
+# iterate over all members and set the registration date to the
+# oldes creation date of the member services for the given user.
+
+count = 0
+pc = getToolByName(portal, 'portal_catalog')
+
+for member in pmt.listMembers():
+    registration_date = member.getProperty('registrationdate')
+
+    if not registration_date == DateTime("1970/01/01 00:00:00 GMT+2"):
+        continue
+
+    query = {'portal_type': 'emas.app.memberservice',
+             'userid': member.getId() }
+    cdates = [b.created for b in pc(query)]
+    if cdates:
+        cdates.sort()
+        regdate = cdates[0]
+    else:
+        continue
+
+    print "Setting registration date for %s to %s" % (
+        member.getId(), regdate
+        )
+    member.setMemberProperties(mapping={"registrationdate": regdate})
+    count += 1
+
+    if count % 100 == 0:
+        print 'Committing transaction. Count = ', count
+        try:
+            transaction.commit()
+        except ConflictError: 
+            print "Could not commit transaction, restarting transaction."
+            # start a new transaction
+            transaction.begin() 
+
+
 transaction.commit()
