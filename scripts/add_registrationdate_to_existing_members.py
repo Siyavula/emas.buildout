@@ -8,6 +8,7 @@ from AccessControl.SecurityManagement import newSecurityManager
 from zope.app.component.hooks import setSite
 from Products.CMFCore.utils import getToolByName
 from DateTime import DateTime
+from ZODB.POSException import ConflictError
 
 # Setup the environment for the script and make sure we have all required values
 # app is bound for us, when this script starts.
