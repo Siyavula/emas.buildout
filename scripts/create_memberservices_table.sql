@@ -3,8 +3,6 @@ CREATE TABLE MEMBERSERVICES (
     MEMBERID varchar(100) not null,
     TITLE varchar(100) not null,
     RELATED_SERVICE_ID integer not null,
-    SUBJECT varchar(100) not null,
-    GRADE varchar(100) not null,
     EXPIRY_DATE date,
     CREDITS integer,
     SERVICE_TYPE varchar(100),
