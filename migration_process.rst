@@ -76,26 +76,3 @@ Remove memberservice content type, workflows, etc.
 
 Delete old memberservices folder
 --------------------------------
-
-zope.testrecorder
------------------
-    
-    Installation
-
-    Check out the source
-
-        svn co svn://svn.zope.org/repos/main/zope.testrecorder/trunk zope.testrecorder
-
-    Install in virtualenv python
-
-        cd zope.testrecoder
-
-        [instance]/bin/python setup.py install
-
-    Using zope.testrecorder
-
-        Start your instance
-
-        Navigate to: http://localhost:8080/++resource++recorder/index.html
-
-

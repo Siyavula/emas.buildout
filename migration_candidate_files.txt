@@ -154,6 +154,7 @@ src/emas.theme/emas/theme/browser/tests/test_practice_service_messages_viewlet.p
     run tests
 
 src/emas.theme/emas/theme/browser/tests/test_practice.py
+    remove use of emas.theme.browser.practice.filtered method
     run tests
 
 src/emas.theme/emas/theme/profiles/default/actions.xml
