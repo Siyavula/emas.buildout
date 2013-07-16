@@ -29,9 +29,7 @@ def process(portal):
                 if vcu.is_unique(vc):
                     vcu.add(vc, order)
                 else:
-                    print 'Duplicate verification code:%s' % vc
-            else:
-                print 'Order:%s has no verification code.' % order.getId()
+                    print 'Duplicate verification code:%s for order:%s' % (vc, order.getId())
         except ConflictError as e:
             print 'Could not add order:%s' % order.getId()
         if not count % 1000:
@@ -61,3 +59,4 @@ user = app.acl_users.getUser('admin')
 newSecurityManager(None, user.__of__(app.acl_users))
 
 process(portal)
+transaction.commit()
