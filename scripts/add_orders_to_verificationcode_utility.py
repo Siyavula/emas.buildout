@@ -30,9 +30,6 @@ def process(portal):
                     vcu.add(vc, order)
                 else:
                     print 'Duplicate verification code:%s for order:%s' % (vc, order.getId())
-                    new_vc = vcu.generate(order)
-                    order.verification_code = new_vc
-                    order.reindexObject(idxs=['verification_code'])
         except ConflictError as e:
             print 'Could not add order:%s' % order.getId()
         if not count % 1000:
