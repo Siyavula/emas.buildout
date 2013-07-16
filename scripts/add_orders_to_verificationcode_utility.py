@@ -20,7 +20,7 @@ TIME_FORMAT = '%H:%M:%S:%s'
 def process(portal):
     print '-------------------------------------------------------------------'
     print('Started at:%s' % datetime.datetime.now().strftime(TIME_FORMAT))
-    vcu = getUtility(IVerificationCodeUtility)
+    vcu = getUtility(IVerificationCodeUtility, context=portal)
     for count, order in enumerate(portal.orders.objectValues()):
         print('Adding order:%s number%s' % (order.getId(), count))
         try:
