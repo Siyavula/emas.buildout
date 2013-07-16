@@ -25,7 +25,6 @@ def process(portal):
     for count, order in enumerate(portal.orders.objectValues()):
         try:
             if order.verification_code:
-                print('Adding order:%s number%s' % (order.getId(), count))
                 vc = int(order.verification_code)
                 if vcu.is_unique(vc):
                     vcu.add(vc, order)
