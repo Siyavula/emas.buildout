@@ -25,7 +25,11 @@ def process(portal):
         print('Adding order:%s number%s' % (order.getId(), count))
         try:
             if order.verification_code:
-                vcu.add(int(order.verification_code), order)
+                vc = int(order.verification_code)
+                if vcu.is_unique(vc):
+                    print 'Duplicate verification code:%s' % vc
+                else:
+                    vcu.add(vc, order)
             else:
                 print 'Order:%s has no verification code.' % order.getId()
         except ConflictError as e:
