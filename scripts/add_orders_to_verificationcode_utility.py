@@ -21,6 +21,7 @@ def process(portal):
     print '-------------------------------------------------------------------'
     print('Started at:%s' % datetime.datetime.now().strftime(TIME_FORMAT))
     vcu = getUtility(IVerificationCodeUtility, context=portal)
+    vcu._verification_codes.clear()
     for count, order in enumerate(portal.orders.objectValues()):
         try:
             if order.verification_code:
