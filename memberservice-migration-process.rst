@@ -68,11 +68,23 @@ Import memberservices to postgres DB
     To set the sequence value use:
     alter sequence memberservices_memberservice_id_seq restart with NNN;
 
+Update the memberserviceid sequence
+-----------------------------------
+    
+    Edit [instance]/scripts/update_memberserviceid_sequence.sql
+    Change the restart value to the max of memberserviceid in the memberservices
+    table.
+    You can get the value in a psql session with something like this:
+    select max(memberservice_id) from memberservices;
+    
+    In [instance]/scripts run:
+    ./04_update_memberserviceid_sequence.sh
+
+
 Delete old memberservices
 -------------------------
 
-Remove memberservice content type, workflows, etc.
---------------------------------------------------
+    In [instance]/scripts run:
+    ./05_delete_old_memberservices.py emas
 
-Delete old memberservices folder
---------------------------------
+    Be patient this will take quite some time.
