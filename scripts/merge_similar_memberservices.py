@@ -35,10 +35,7 @@ def merge_with(self, other):
     return self
 
 
-def merge_memberservices(portal, memberservices, current_idx=0):
-    if not memberservices or current_idx >= len(memberservices):
-        return memberservices
-
+def merge_memberservices(portal, memberservices):
     other = memberservices[current_idx]
     for memberservice in memberservices:
         if memberservice == other:
@@ -48,8 +45,8 @@ def merge_memberservices(portal, memberservices, current_idx=0):
                 memberservice.Title(), other.Title()
             )
             merge_with(memberservice, other)
+            print '    Deleting %s' % other.getId()
             portal.memberservices.manage_delObjects([other.getId()])
-    return merge_memberservices(portal, memberservices, current_idx+1) 
 
 
 def process(portal, pmt):
@@ -94,6 +91,7 @@ def process(portal, pmt):
                 if len(services) <= 1:
                     continue
                 else:
+                    assert len(services) == 2
                     print 'Merging member services for member: %s' % mid
                     merge_memberservices(portal, services)
         
