@@ -25,6 +25,8 @@ def is_similar_to(self, other):
 
 def merge_with(self, other):
     if other.expiry_date > self.expiry_date:
+        print '    Changing expiry date from %s to %s' % (self.expiry_date,
+                                                          other.expiry_date)
         self.expiry_date = other.expiry_date
     self_subs_period = self.related_service.to_object.subscription_period
     other_subs_period = other.related_service.to_object.subscription_period
