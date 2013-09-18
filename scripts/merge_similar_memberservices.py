@@ -28,7 +28,7 @@ def merge_memberservices(portal, memberservices):
         related_service = service.related_service.to_object
         if related_service.subscription_period == 30:
             monthlyservice = service
-        elif related_service.subscription_period == 365:
+        elif related_service.subscription_period == 180:
             yearlyservice = service
     if is_similar_to(yearlyservice, monthlyservice):
         print '    %s and %s are similar, merging...' % (
