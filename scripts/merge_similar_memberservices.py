@@ -24,29 +24,23 @@ def is_similar_to(self, other):
 
 
 def merge_with(self, other):
-    now = datetime.datetime.now().date()
-    delta = other.expiry_date - now
-    if delta.days > 0:
-        self.expiry_date = self.expiry_date + delta
+    if other.expiry_date > self.expiry_date:
+        self.expiry_date = other.expiry_date
     self_subs_period = self.related_service.to_object.subscription_period
     other_subs_period = other.related_service.to_object.subscription_period
     if other_subs_period > self_subs_period:
         self.related_service = other.related_service
-    return self
 
 
 def merge_memberservices(portal, memberservices):
-    other = memberservices[current_idx]
-    for memberservice in memberservices:
-        if memberservice == other:
-            continue
-        if is_similar_to(memberservice, other):
-            print '    %s and %s are similar, merging...' % (
-                memberservice.Title(), other.Title()
-            )
-            merge_with(memberservice, other)
-            print '    Deleting %s' % other.getId()
-            portal.memberservices.manage_delObjects([other.getId()])
+    service1, service2 = memberservices
+    if is_similar_to(service1, service2):
+        print '    %s and %s are similar, merging...' % (
+            service1.Title(), service2.Title()
+        )
+        merge_with(service1, service2)
+        print '    Deleting %s' % service2.getId()
+        portal.memberservices.manage_delObjects([service2.getId()])
 
 
 def process(portal, pmt):
