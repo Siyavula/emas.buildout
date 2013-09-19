@@ -22,15 +22,18 @@ def is_similar_to(self, other):
             return False
     return True
 
+count = 0
 
 def merge_memberservices(portal, memberservices):
+    global count
     for service in memberservices:
         related_sevice = service.related_service.to_object
         if related_service.subscription_period == 30:
             monthlyservice = service
-        elif related_service.subscription_period == 365:
+        elif related_service.subscription_period in (180,365):
             yearlyservice = service
     if is_similar_to(yearlyservice, monthlyservice):
+        count += 1
         print '    %s and %s are similar, merging...' % (
             yearlyservice.Title(), monthlyservice.Title()
         )
@@ -41,6 +44,7 @@ def merge_memberservices(portal, memberservices):
 
 
 def process(portal, pmt):
+    global count
     suids = []
     for subject in ('maths', 'science'):
         for grade in (10, 11, 12):
@@ -67,7 +71,7 @@ def process(portal, pmt):
     for service in app.emas['products_and_services'].objectValues():
         if service.getId().endswith('-practice')
             suids.append(IUUID(service))
-    for count, mid in enumerate(mids):
+    for mid in mids:
         for subject in ['maths', 'science']:
             memberservices = utils.member_services_for_subject(portal,
                                                                suids,
