@@ -69,7 +69,7 @@ def process(portal, pmt):
     print 'Processing a total of %s members.' % total
     suids = []
     for service in app.emas['products_and_services'].objectValues():
-        if service.getId().endswith('-practice')
+        if service.getId().endswith('-practice'):
             suids.append(IUUID(service))
     for mid in mids:
         for subject in ['maths', 'science']:
