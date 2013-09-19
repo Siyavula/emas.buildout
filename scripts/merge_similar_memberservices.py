@@ -32,7 +32,7 @@ def merge_memberservices(portal, memberservices):
             yearlyservice = service
     if is_similar_to(yearlyservice, monthlyservice):
         print '    %s and %s are similar, merging...' % (
-            service1.Title(), service2.Title()
+            yearlyservice.Title(), monthlyservice.Title()
         )
         if yearlyservice.expiry_date < monthlyservice.expiry_date:
             yearlyservice.expiry_date = monthlyservice.expiry_date
@@ -63,11 +63,14 @@ def process(portal, pmt):
     total = len(mids)
     print '--------------------------------START-------------------------------'
     print 'Processing a total of %s members.' % total
-    uids = utils.practice_service_uuids(portal)
+    suids = []
+    for service in app.emas['products_and_services'].objectValues():
+        if service.getId().endswith('-practice')
+            suids.append(IUUID(service))
     for count, mid in enumerate(mids):
         for subject in ['maths', 'science']:
             memberservices = utils.member_services_for_subject(portal,
-                                                               uids,
+                                                               suids,
                                                                mid,
                                                                subject)
             # group by grade
