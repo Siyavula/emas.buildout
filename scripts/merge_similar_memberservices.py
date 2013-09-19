@@ -27,7 +27,7 @@ count = 0
 def merge_memberservices(portal, memberservices):
     global count
     for service in memberservices:
-        related_sevice = service.related_service.to_object
+        related_service = service.related_service.to_object
         if related_service.subscription_period == 30:
             monthlyservice = service
         elif related_service.subscription_period in (180,365):
