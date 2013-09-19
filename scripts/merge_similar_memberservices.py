@@ -39,7 +39,7 @@ def merge_memberservices(portal, memberservices):
         )
         if yearlyservice.expiry_date < monthlyservice.expiry_date:
             yearlyservice.expiry_date = monthlyservice.expiry_date
-        print '    Deleting %s' % service2.getId()
+        print '    Deleting %s' % monthlyservice.getId()
         portal.memberservices.manage_delObjects([monthlyservice.getId()])
 
 
