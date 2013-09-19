@@ -22,7 +22,7 @@ def is_similar_to(self, other):
             return False
     return True
 
-count = 0
+count = 1
 
 def merge_memberservices(portal, memberservices):
     global count
