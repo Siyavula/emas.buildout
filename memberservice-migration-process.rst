@@ -88,3 +88,9 @@ Delete old memberservices
     ./05_delete_old_memberservices.py emas
 
     Be patient this will take quite some time.
+
+Install monassis
+----------------
+
+    pg_createcluster 9.1 monassis
+
