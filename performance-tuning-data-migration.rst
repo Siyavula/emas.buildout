@@ -76,10 +76,10 @@ Import memberservices to postgres DB
     To set the sequence value use:
     alter sequence memberservices_memberservice_id_seq restart with NNN;
 
-    NNN should be set to max(memberservice_id) +1
+    NNN should be set to max(memberservice_id)
 
     Or, update the file scripts/update_memberserviceid_sequence.sql and set
-    set NNN to max(memberservice_id) +1
+    set NNN to max(memberservice_id)
 
     and run scripts/04_update_memberserviceid_sequence.sh
 
