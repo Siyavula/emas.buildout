@@ -59,12 +59,29 @@ Import memberservices to postgres DB
     In [instance]/scripts run:
     ./03_import_memberservices.sh
 
+    NB: This should prompt you for the password for user 'emas'.
+
+    After the script finishes you can check the amount of memberservice rows
+    from the psql prompt with:
+
+    SELECT COUNT(*) FROM memberservices;
+
+    This should be one less than the amount of rows in memberservices.csv, since
+    the export file contains an additional line with column headings.
+
     NB: check the memberservices_memberservice_id_seq sequence. Make sure it
     is set to a value greater than:
-    select max(memberservice_id) from memberservices;
+    SELECT MAX(memberservice_id) FROM memberservices;
     
     To set the sequence value use:
     alter sequence memberservices_memberservice_id_seq restart with NNN;
+
+    NNN should be set to max(memberservice_id) +1
+
+    Or, update the file scripts/update_memberserviceid_sequence.sql and set
+    set NNN to max(memberservice_id) +1
+
+    and run scripts/04_update_memberserviceid_sequence.sh
 
 Update the memberserviceid sequence
 -----------------------------------
