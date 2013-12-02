@@ -1,3 +1,14 @@
+Get the latest filestorage and blobstorage from siyavula3
+---------------------------------------------------------
+    
+    In [instance home]/var, execute:
+
+    rsync --bwlimit=10000 -Pva --rsh="ssh -p222" siyavula3.upfronthosting.co.za:/home/zope/instances/emas.buildout/var/filestorage ./filestorage
+
+    rsync --bwlimit=10000 -Pva --rsh="ssh -p222" siyavula3.upfronthosting.co.za:/home/zope/instances/emas.buildout/var/blobstorage ./blobstorage
+
+    Both these will take some time so watch the progress and 'top' on s3.
+
 Create new cluster and database
 -------------------------------
     
@@ -26,6 +37,24 @@ Create new cluster and database
     Access the DB as emas user
     >>psql -p 5435 -U emas
 
+    On siyavula p02 this won't work, rather use:
+    >>psql -h 10.0.0.2 -d emas -U emas
+
+    At the postgresql prompt "emas=>" use:
+    \d
+    to get a list of all the tables in the 'emas' database.
+
+After initial create of cluster and tables
+------------------------------------------
+
+    Clear the memberservices table with:
+    DELETE from memberservices;
+
+    This might take a while depending on then current amount of rows. 
+    
+    Reset the sequence "memberservices_memberservice_id_seq" with:
+    ALTER SEQUENCE memberservices_memberservice_id_seq RESTART with 1;
+
 Set max_prepared_transactions
 -----------------------------
 
@@ -48,6 +77,9 @@ Export current memberservices
 
     In [instance]/scripts run:
     ./bin/instance run ./scripts/01_export_memberservices.py emas
+
+    We currently have more than 210000 memberservices so this process runs for
+    a bit.
 
 Create MEMBERSERVICE table
 --------------------------
