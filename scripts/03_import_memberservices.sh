@@ -1,3 +1,3 @@
 #!/bin/bash
 
-psql -p 5432 -U emas emas < import_memberservices.sql
+psql -h 10.0.0.2 -d emas -U emas < import_memberservices.sql
