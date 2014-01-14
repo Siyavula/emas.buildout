@@ -8,7 +8,7 @@ Create new cluster and database
     >>sudo -i -u postgres
 
     Access the database
-    >>psql -p 5435 (NB: check on which PORT the RELEVANT CLUSTER runs!)
+    >>psql -p 5432 (NB: check on which PORT the RELEVANT CLUSTER runs!)
     
     Create the new database
     create database emas;
@@ -24,7 +24,14 @@ Create new cluster and database
     local   emas     emas                           trust 
 
     Access the DB as emas user
-    >>psql -p 5435 -U emas
+    >>psql -p 5432 -U emas
+
+    On siyavula p02 this won't work, rather use:
+    >>psql -h 10.0.0.2 -d emas -U emas
+
+    To get a list of all the tables in the 'emas' database at the postgresql
+    prompt "emas=>" use:
+    \d
 
 Set max_prepared_transactions
 -----------------------------
@@ -43,36 +50,11 @@ Set max_prepared_transactions
 
     If the restart fails you might have to check the kernel's SHMMAX parameter.
 
-Export current memberservices
------------------------------
-
-    In [instance]/scripts run:
-    ./bin/instance run ./scripts/01_export_memberservices.py emas
-
 Create MEMBERSERVICE table
 --------------------------
 
     In [instance]/scripts run:
     ./02_create_memberservices_table.sh
 
-Import memberservices to postgres DB
-------------------------------------
-    
-    In [instance]/scripts run:
-    ./03_import_memberservices.sh
-
-    NB: check the memberservices_memberservice_id_seq sequence. Make sure it
-    is set to a value greater than:
-    select max(memberservice_id) from memberservices;
-    
-    To set the sequence value use:
-    alter sequence memberservices_memberservice_id_seq restart with NNN;
-
-Delete old memberservices
--------------------------
-
-Remove memberservice content type, workflows, etc.
---------------------------------------------------
-
-Delete old memberservices folder
---------------------------------
+Install monassis
+----------------

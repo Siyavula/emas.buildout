@@ -32,6 +32,9 @@ Install wkhtmltoimage by downloading the binary from:
     Extract the tarball, rename the binary to wkhtmltoimage and move it
     to /usr/local/bin.
 
+Install truetype fonts for the mobile theme's image rendering
+
+    apt-get install ttf-mscorefonts-installer
 
 Installation
 ============
