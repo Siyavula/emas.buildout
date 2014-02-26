@@ -7,7 +7,7 @@ from Testing import makerequest
 from AccessControl.SecurityManagement import newSecurityManager
 
 from zope.component import getUtility
-from emas.theme.usercatalog import IUserCatalog
+from emas.app.usercatalog import IUserCatalog
 from zope.app.component.hooks import setSite
 from Products.CMFCore.utils import getToolByName
 
