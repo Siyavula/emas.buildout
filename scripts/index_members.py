@@ -5,8 +5,11 @@ import transaction
 
 from Testing import makerequest
 from AccessControl.SecurityManagement import newSecurityManager
+from ZODB.POSException import ConflictError
 
 from zope.component import getUtility
+from zope.intid import queryId
+from zope.intid import IIntIds
 from emas.app.usercatalog import IUserCatalog
 from zope.app.component.hooks import setSite
 from Products.CMFCore.utils import getToolByName
@@ -35,13 +38,20 @@ newSecurityManager(None, user.__of__(app.acl_users))
 pmt = getToolByName(portal, 'portal_membership')
 
 uc = getUtility(IUserCatalog, context=portal)
+ints = getUtility(IIntIds)  
 
 for index, mid in enumerate(pmt.listMemberIds()):
     member = pmt.getMemberById(mid)
-    uc.index(member)
-    print "Indexing", mid
+    if ints.queryId(member) is not None:
+        uc.index(member)
+        print "Indexing", mid
+    else:
+        print "Already indexed", mid
     if index % 1000 == 0:
-        transaction.commit()
-        print "Committing transaction"
+        try:
+            print "Committing transaction"
+            transaction.commit()
+        except ConflictError as e:
+            print 'Could not commit after' % index
 
 transaction.commit()
