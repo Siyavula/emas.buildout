@@ -8,7 +8,6 @@ from AccessControl.SecurityManagement import newSecurityManager
 from ZODB.POSException import ConflictError
 
 from zope.component import getUtility
-from zope.intid import queryId
 from zope.intid import IIntIds
 from emas.app.usercatalog import IUserCatalog
 from zope.app.component.hooks import setSite
