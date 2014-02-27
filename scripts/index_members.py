@@ -36,9 +36,12 @@ pmt = getToolByName(portal, 'portal_membership')
 
 uc = getUtility(IUserCatalog, context=portal)
 
-for mid in pmt.listMemberIds():
+for index, mid in enumerate(pmt.listMemberIds()):
     member = pmt.getMemberById(mid)
     uc.index(member)
-    print "Indexing ", mid
+    print "Indexing", mid
+    if index % 1000 == 0:
+        transaction.commit()
+        print "Committing transaction"
 
 transaction.commit()
