@@ -41,7 +41,7 @@ ints = getUtility(IIntIds)
 
 for index, mid in enumerate(pmt.listMemberIds()):
     member = pmt.getMemberById(mid)
-    if ints.queryId(member) is not None:
+    if ints.queryId(member) is None:
         uc.index(member)
         print "Indexing", mid
     else:
