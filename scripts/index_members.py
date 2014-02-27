@@ -52,5 +52,7 @@ for index, mid in enumerate(pmt.listMemberIds()):
             transaction.commit()
         except ConflictError as e:
             print 'Could not commit after', index
+            # start a new transaction
+            transaction.begin() 
 
 transaction.commit()
