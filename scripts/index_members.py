@@ -9,6 +9,7 @@ from ZODB.POSException import ConflictError
 
 from zope.component import getUtility
 from zope.intid import IIntIds
+from zope.index.field import FieldIndex
 from emas.app.usercatalog import IUserCatalog
 from zope.app.component.hooks import setSite
 from Products.CMFCore.utils import getToolByName
@@ -37,11 +38,16 @@ newSecurityManager(None, user.__of__(app.acl_users))
 pmt = getToolByName(portal, 'portal_membership')
 
 uc = getUtility(IUserCatalog, context=portal)
+# we added _regdate later so we can't assume the catalog has this index
+# yet
+if not hasattr(uc, '_regdate'):
+    uc._regdate = FieldIndex()
 ints = getUtility(IIntIds)  
 
 for index, mid in enumerate(pmt.listMemberIds()):
     member = pmt.getMemberById(mid)
-    if ints.queryId(member) is None:
+    mintid = ints.queryId(member)
+    if not uc._regdate._rev_index.has_key(mintid):
         uc.index(member)
         print "Indexing", mid
     else:
