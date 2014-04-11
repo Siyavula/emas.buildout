@@ -14,6 +14,7 @@ from emas.app.usercatalog import IUserCatalog
 from zope.app.component.hooks import setSite
 from Products.CMFCore.utils import getToolByName
 
+from BTrees.IOBTree import IOBTree
 
 # Setup the environment for the script and make sure we have all required values
 # app is bound for us, when this script starts.
@@ -42,19 +43,16 @@ uc = getUtility(IUserCatalog, context=portal)
 # yet
 if not hasattr(uc, '_regdate'):
     uc._regdate = FieldIndex()
+if not hasattr(uc, '_metadata'):
+    uc._metadata = IOBTree()
 ints = getUtility(IIntIds)  
 
 for index, mid in enumerate(pmt.listMemberIds()):
     member = pmt.getMemberById(mid)
     mintid = ints.queryId(member)
-    regdate = member.getProperty('registrationdate')
-    regdate = datetime.datetime.strptime(regdate.strftime("%Y-%m-%d"),
-                                         "%Y-%m-%d")
-    if not uc._regdate._rev_index.has_key(mintid):
+    if not uc._metadata.has_key(mintid):
         uc.index(member)
         print "Indexing", mid
-    elif uc._regdate._rev_index[mintid] != regdate:
-        print "Re-indexing date for", mid
     else:
         print "Already indexed", mid
     if index % 1000 == 0:
