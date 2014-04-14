@@ -50,11 +50,21 @@ ints = getUtility(IIntIds)
 for index, mid in enumerate(pmt.listMemberIds()):
     member = pmt.getMemberById(mid)
     mintid = ints.queryId(member)
+
+    regdate = member.getProperty('registrationdate')
+    regdate = datetime.datetime.strptime(
+        regdate.strftime("%Y-%m-%d"), "%Y-%m-%d")
+
     if not uc._metadata.has_key(mintid):
         uc.index(member)
         print "Indexing", mid
-    else:
-        print "Already indexed", mid
+    elif uc._metadata.has_key(mintid):
+        md = uc._metadata[mintid]
+        if md['registrationdate'] != regdate:
+            print "Re-indexing", mid
+        else:
+            print "Already indexed", mid
+
     if index % 1000 == 0:
         try:
             print "Committing transaction"
