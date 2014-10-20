@@ -47,7 +47,13 @@ products_and_services = portal['products_and_services']
 
 for sid in service_ids:
     service = products_and_services[sid]
-    service.subscription_period = 180
-    print "Updating subscription period for ", service.Title()
+    service.subscription_period = 365
+    # the total price for the 3 grades should amount to R350, this is why
+    # we have such odd prices
+    if sid in ('maths-grade10-practice', 'science-grade10-practice'):
+        service.price = 116.66
+    else:
+        service.price = 116.67
+    print "Updating pricing and subscription period for ", service.Title()
 
 transaction.commit()
