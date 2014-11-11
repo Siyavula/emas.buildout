@@ -40,20 +40,27 @@ def create_user(last_login, pwh, **kw):
     data['identifiers'].update(kw)
     req = Request('http://localhost:6544/users', 'POST')
     req.add_header('Content-Type', 'application/json')
-    response = urllib2.urlopen(req, json.dumps(data))
-    if response.code == 200:
-        result = json.loads(response.read())
-        return result['user']['user_id']
+    try:
+        response = urllib2.urlopen(req, json.dumps(data))
+        if response.code == 200:
+            result = json.loads(response.read())
+            return result['user']['user_id']
+    except urllib2.HTTPError:
+        pass
     return None
 
 def update_profile(uuid, **kw):
     data = {}
     data.update(kw)
 
-    req = Request('http://localhost:6543/update/{}'.format(uuid), 'PUT')
+    req = Request('http://localhost:6543/profile/update/{}'.format(uuid), 'PUT')
     req.add_header('Content-Type', 'application/json')
-    response = urllib2.urlopen(req, json.dumps(data))
-    return response.code == 200
+    try:
+        response = urllib2.urlopen(req, json.dumps(data))
+        return response.code == 200
+    except urllib2.HTTPError:
+        pass
+    return False
 
 uf = getToolByName(portal, 'acl_users')
 pwmap = uf.source_users._user_passwords
@@ -80,7 +87,7 @@ for uid, pw in pwmap.items():
         province = member.getProperty('province')
         newsletter = member.getProperty('subscribe_to_newsletter')
         registered = member.getProperty('registrationdate')
-        last_login = member.getProperty('last_login_time').ISO()
+        last_login = member.getProperty('last_login_time').strftime('%Y-%m-%dT%H:%M:%S')
 
         # Split fullname into name and surname
         if fullname != '':
@@ -98,6 +105,7 @@ for uid, pw in pwmap.items():
         # uuid, use that to register the profile details.
         uuid = create_user(last_login, password, username=uid, email=email)
         if uuid is not None:
+            member.setProperties(profile_uuid=uuid)
             update_profile(uuid,
                 general = {
                     'name': name,
@@ -107,11 +115,17 @@ for uid, pw in pwmap.items():
                 },
                 emas = {
                     'registrationdate': registered.ISO(),
-                    'memberservices': memberservices
+                    'memberservices': memberservices,
+                    'userrole': role,
+                    'school': school,
+                    'province': province,
+                    'subscribe_to_newsletter': newsletter
                 }
             )
 
         count += 1
         if count % 50 == 0:
             print "Migrated {0} of {1}".format(count, total)
+            transaction.commit()
 print "Migrated {0} users".format(count)
+transaction.commit()
