@@ -53,7 +53,7 @@ def update_profile(uuid, **kw):
     data = {}
     data.update(kw)
 
-    req = Request('http://localhost:6543/profile/update/{}'.format(uuid), 'PUT')
+    req = Request('http://localhost:6543/profile/update/{0}'.format(uuid), 'PUT')
     req.add_header('Content-Type', 'application/json')
     try:
         response = urllib2.urlopen(req, json.dumps(data))
