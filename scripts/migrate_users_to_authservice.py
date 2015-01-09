@@ -45,8 +45,10 @@ def create_user(last_login, pwh, **kw):
         if response.code == 200:
             result = json.loads(response.read())
             return result['user']['user_id']
-    except urllib2.HTTPError:
-        pass
+    except urllib2.HTTPError, e:
+        fp = open('errors.log', 'a')
+        fp.write(e.read())
+        fp.close()
     return None
 
 def update_profile(uuid, **kw):
@@ -71,6 +73,7 @@ msdao = MemberServicesDataAccess(portal)
 # member separately.
 total = len(pwmap)
 count = 0
+emails = {}
 for uid, pw in pwmap.items():
     member = uf.getUser(uid)
     pw = pwmap.get(uid, None)
@@ -81,7 +84,7 @@ for uid, pw in pwmap.items():
 
         # Other details we need
         fullname = member.getProperty('fullname')
-        email = member.getProperty('email')
+        email = member.getProperty('email').lower()
         role = member.getProperty('userrole')
         school = member.getProperty('school')
         province = member.getProperty('province')
@@ -103,7 +106,16 @@ for uid, pw in pwmap.items():
 
         # First create the user in the auth service, that will give you his
         # uuid, use that to register the profile details.
-        uuid = create_user(last_login, password, username=uid, email=email)
+        kw = {}
+        if email == uid:
+            kw['email'] = email
+        else:
+            kw['username'] = uid
+            if email not in emails:
+                emails[email] = None
+                kw['email'] = email
+
+        uuid = create_user(last_login, password, **kw)
         if uuid is not None:
             member.setProperties(profile_uuid=uuid)
             update_profile(uuid,
