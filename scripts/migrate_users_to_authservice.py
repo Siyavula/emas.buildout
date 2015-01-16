@@ -73,7 +73,6 @@ msdao = MemberServicesDataAccess(portal)
 # member separately.
 total = len(pwmap)
 count = 0
-emails = {}
 for uid, pw in pwmap.items():
     member = uf.getUser(uid)
     pw = pwmap.get(uid, None)
@@ -106,16 +105,7 @@ for uid, pw in pwmap.items():
 
         # First create the user in the auth service, that will give you his
         # uuid, use that to register the profile details.
-        kw = {}
-        if email == uid:
-            kw['email'] = email
-        else:
-            kw['username'] = uid
-            if email not in emails:
-                emails[email] = None
-                kw['email'] = email
-
-        uuid = create_user(last_login, password, **kw)
+        uuid = create_user(last_login, password, username=uid)
         if uuid is not None:
             member.setProperties(profile_uuid=uuid)
             update_profile(uuid,
@@ -123,8 +113,9 @@ for uid, pw in pwmap.items():
                     'name': name,
                     'surname': surname,
                     'username': uid,
-                    'email': email,
+                    'email': None,
                 },
+                pre-migration-email = email,
                 emas = {
                     'registrationdate': registered.ISO(),
                     'memberservices': memberservices,
