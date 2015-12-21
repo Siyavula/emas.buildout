@@ -1,0 +1,4 @@
+Run bin/buildout -Nvc primary-zeo.cfg on sp2
+
+Run bin/buildout -Nvc secondary-zeo.cfg on sp3
+
