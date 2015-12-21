@@ -115,7 +115,7 @@ for uid, pw in pwmap.items():
                     'username': uid,
                     'email': None,
                 },
-                pre-migration-email = email,
+                pre_migration-email = email,
                 emas = {
                     'registrationdate': registered.ISO(),
                     'memberservices': memberservices,
