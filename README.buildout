@@ -1,0 +1,12 @@
+On qa run:
+
+    bin/buildout -Nvc qa.cfg
+
+On sp2 run:
+
+    bin/buildout -Nvc primary-zeo.cfg
+
+On sp3 run:
+
+    bin/buildout -Nvc secondary-zeo.cfg
+
